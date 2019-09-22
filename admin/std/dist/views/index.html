@@ -477,10 +477,24 @@
 <script src="../layuiadmin/layui/layui.js"></script>
 <script>
     layui.config({
-        base: '../layuiadmin/' //静态资源所在路径
+        base: '../layuiadmin/' //静态资源所在路径 
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use('index');
+    }).use(['index'],function () {
+        console.log(layui.data('token').token)
+        var admin = layui.admin;
+        admin.req({
+            url: "http://www.swoft.axing.com/admin/getUserInfo"    //请求的url地址
+            ,type:"POST"        //请求方式
+            ,headers:{
+                'token':layui.data('token').token
+            }
+            ,done: function(){
+               
+            }
+        });
+    });
+   
 </script>
 
 </body>
