@@ -5,14 +5,9 @@
     <title>layuiAdmin std - 通用后台管理模板系统（iframe标准版）</title>
     <meta content="webkit" name="renderer">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          name="viewport">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
     <link href="../layuiadmin/layui/css/layui.css" media="all" rel="stylesheet">
     <link href="../layuiadmin/style/admin.css" media="all" rel="stylesheet">
-
-    <script>
-        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
-    </script>
 </head>
 <body class="layui-layout-body">
 
@@ -68,7 +63,7 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>贤心</cite>
+                        <cite id="name"></cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -94,7 +89,6 @@
                 <div class="layui-logo" lay-href="home/console.html">
                     <span>layuiAdmin</span>
                 </div>
-
                 <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu"
                     lay-shrink="all">
                     <li class="layui-nav-item layui-nav-itemed" data-name="home">
@@ -480,17 +474,18 @@
         base: '../layuiadmin/' //静态资源所在路径 
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index'],function () {
-        console.log(layui.data('token').token)
-        var admin = layui.admin;
+    }).use(['index','jquery'],function () {
+        const admin = layui.admin;
+        const $ = layui.jquery;
+
         admin.req({
             url: "http://www.swoft.axing.com/admin/getUserInfo"    //请求的url地址
             ,type:"POST"        //请求方式
             ,headers:{
                 'token':layui.data('token').token
             }
-            ,done: function(){
-               
+            ,done: function(data){
+                $("#name").text(data.data.username);
             }
         });
     });

@@ -117,11 +117,11 @@
                         ,icon: 1
                         ,time: 1000
                     }, function(){
-                        // location.href = '../'; //后台主页
+                        location.href = '../'; //后台主页
                     });
                 }
                 ,complete:function(obj){
-                    layui.data('token',{'token':obj.getResponseHeader('token')});
+                    layui.data('token',{'key':'token','value':obj.getResponseHeader('token')});
                 }
             });
         });
