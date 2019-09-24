@@ -108,7 +108,7 @@
                             </dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item" data-name="component">
+                    <li class="layui-nav-item" data-name="component" style="display: none;">
                         <a href="javascript:;" lay-direction="2" lay-tips="组件">
                             <i class="layui-icon layui-icon-component"></i>
                             <cite>组件</cite>
@@ -317,20 +317,21 @@
                             <cite>页面</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a lay-href="template/personalpage.html">个人主页</a></dd>
-                            <dd><a lay-href="template/addresslist.html">通讯录</a></dd>
-                            <dd><a lay-href="template/caller.html">客户列表</a></dd>
-                            <dd><a lay-href="template/goodslist.html">商品列表</a></dd>
-                            <dd><a lay-href="template/msgboard.html">留言板</a></dd>
-                            <dd><a lay-href="template/search.html">搜索结果</a></dd>
-                            <dd><a href="user/reg.html" target="_blank">注册</a></dd>
-                            <dd><a href="user/login.html" target="_blank">登入</a></dd>
-                            <dd><a href="user/forget.html" target="_blank">忘记密码</a></dd>
-                            <dd><a lay-href="template/tips/404.html">404页面不存在</a></dd>
-                            <dd><a lay-href="template/tips/error.html">错误提示</a></dd>
-                            <dd><a lay-href="//www.baidu.com/">百度一下</a></dd>
-                            <dd><a lay-href="//www.layui.com/">layui官网</a></dd>
-                            <dd><a lay-href="//www.layui.com/admin/">layuiAdmin官网</a></dd>
+                            <!--<dd><a lay-href="template/personalpage.html">个人主页</a></dd>-->
+                            <!--<dd><a lay-href="template/addresslist.html">通讯录</a></dd>-->
+                            <!--<dd><a lay-href="template/caller.html">客户列表</a></dd>-->
+                            <!--<dd><a lay-href="template/goodslist.html">商品列表</a></dd>-->
+                            <!--<dd><a lay-href="template/msgboard.html">留言板</a></dd>-->
+                            <!--<dd><a lay-href="template/search.html">搜索结果</a></dd>-->
+                            <!--<dd><a href="user/reg.html" target="_blank">注册</a></dd>-->
+                            <!--<dd><a href="user/login.html" target="_blank">登入</a></dd>-->
+                            <!--<dd><a href="user/forget.html" target="_blank">忘记密码</a></dd>-->
+                            <!--<dd><a lay-href="template/tips/404.html">404页面不存在</a></dd>-->
+                            <!--<dd><a lay-href="template/tips/error.html">错误提示</a></dd>-->
+                            <!--<dd><a lay-href="//www.baidu.com/">百度一下</a></dd>-->
+                            <!--<dd><a lay-href="//www.layui.com/">layui官网</a></dd>-->
+                            <!--<dd><a lay-href="//www.layui.com/admin/">layuiAdmin官网</a></dd>-->
+                            <dd><a lay-href="user/coin_config.html">电子货币</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item" data-name="app">
@@ -474,7 +475,7 @@
         base: '../layuiadmin/' //静态资源所在路径 
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index','jquery'],function () {
+    }).use(['index','jquery','layim'],function () {
         const admin = layui.admin;
         const $ = layui.jquery;
 
@@ -488,6 +489,16 @@
                 $("#name").text(data.data.username);
             }
         });
+
+        var socket = new WebSocket('ws://192.168.80.132:9000');
+            socket.onopen = function(){
+                socket.send('连接成功');
+            };
+            socket.onmessage = function(res){
+                console.log(res);
+            //res为接受到的值，如 {"emit": "messageName", "data": {}}
+            //emit即为发出的事件名，用于区分不同的消息
+            };
     });
    
 </script>
