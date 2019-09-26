@@ -490,12 +490,12 @@
             }
         });
 
-        var socket = new WebSocket('ws://192.168.80.132:9000');
+        var socket = new WebSocket('ws://192.168.80.132:9000/chat');
             socket.onopen = function(){
                 socket.send('连接成功');
             };
             socket.onmessage = function(res){
-                console.log(res);
+                console.log(res.data);
             //res为接受到的值，如 {"emit": "messageName", "data": {}}
             //emit即为发出的事件名，用于区分不同的消息
             };
