@@ -489,15 +489,18 @@
                 $("#name").text(data.data.username);
             }
         });
-
-        var socket = new WebSocket('ws://192.168.80.132:9000/chat');
+        var socket = new WebSocket('ws://192.168.80.132:9000/coin');
             socket.onopen = function(){
-                socket.send('连接成功');
+                socket.send('coin.index:这是数据');
             };
             socket.onmessage = function(res){
-                console.log(res.data);
-            //res为接受到的值，如 {"emit": "messageName", "data": {}}
-            //emit即为发出的事件名，用于区分不同的消息
+                if(res.data!==''){
+                    window.dispatchEvent(new CustomEvent('coin',{
+                        detail:{
+                            'brc':res.data
+                        }
+                    }));
+                }
             };
     });
    
