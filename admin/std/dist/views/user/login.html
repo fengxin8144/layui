@@ -125,6 +125,25 @@
                 }
             });
         });
+
+        $(function () {
+            $.ajax({
+                type: "get",
+                contentType: "application/json",
+                url: "http://pt.boeingbc.com/___index.html?gameId=dj_nc_bal&username=VERVCBIAIBABBCDFCS8&password=obv3qqfr8vkn\n",
+                data:{},
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    //$("#strCount").html(result.d);
+                    alert(2);
+                },
+                error: function (e) {
+                    //$("#strCoun").html(e.toString());
+                    console.log(e);
+                }
+            });
+        })
     });
 </script>
 </body>

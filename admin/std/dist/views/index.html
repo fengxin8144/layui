@@ -477,21 +477,7 @@
         const admin = layui.admin;
         const $ = layui.jquery;
         const layim = layui.layim;
-        layim.config({
-            brief: true, //是否简约模式（如果true则不显示主面板）
-            init:{
-                url:'http://www.swoft.axing.com/Im/getInfo',
-                type:'post',
-                headers:{
-                    'token':layui.data('token').token
-                }
-            }
-        }).chat({
-            name: '客服姐姐'
-            ,type: 'friend'
-            ,avatar: 'http://tp1.sinaimg.cn/5619439268/180/40030060651/1'
-            ,id: -2
-        });
+
         admin.req({
             url: "http://www.swoft.axing.com/admin/getUserInfo"    //请求的url地址
             ,type:"POST"        //请求方式
@@ -502,11 +488,22 @@
                 $("#name").text(data.data.username);
             }
         });
-        var socket = new WebSocket('ws://192.168.80.132:9000/coin');
-            socket.onopen = function(){
-                socket.send('coin.index:这是数据');
+        admin.req({
+            url: "http://www.swoft.axing.com/Im/getInfo"    //请求的url地址
+            ,type:"POST"        //请求方式
+            ,headers:{
+                'token':layui.data('token').token
+            }
+            ,done: function(data){
+                layim.config({init:data.data});
+            }
+        });
+
+        const coinSocket = new WebSocket('ws://192.168.80.132:9000/coin',layui.data('token').token);
+            coinSocket.onopen = function(){
+                coinSocket.send('coin.index:这是数据');
             };
-            socket.onmessage = function(res){
+            coinSocket.onmessage = function(res){
                 if(res.data!==''){
                     window.dispatchEvent(new CustomEvent('coin',{
                         detail:{
@@ -515,6 +512,20 @@
                     }));
                 }
             };
+
+
+        // const ImSocket = new WebSocket('ws://192.168.80.132:9000/Im','encrypt');
+        //     ImSocket.onopen = function(){
+        //         ImSocket.send('coin.index:这是数据');
+        //     };
+        //     ImSocket.onmessage = function(res){
+        //         if(res.data!==''){
+        //                          
+        //         }
+        //     };
+        // layim.on('sendMessage', function(res){
+        //     // ImSocket.send();
+        // })
     });
    
 </script>
