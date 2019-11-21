@@ -10,6 +10,20 @@
     <link href="../layuiadmin/layui/css/layui.css" media="all" rel="stylesheet">
     <link href="../layuiadmin/style/admin.css" media="all" rel="stylesheet">
 </head>
+<style>
+    .layui-layim-list li .layim-add-friends {
+        position: absolute;
+        right: 16px;
+        bottom: 10px;
+        z-index: 999999999;
+    }
+
+    .layim-add-friends i {
+        margin-right: 0px !important;
+        font-size: 18px;
+    }
+
+</style>
 <body class="layui-layout-body">
 
 <div id="LAY_app">
@@ -474,31 +488,42 @@
         base: '../layuiadmin/' //静态资源所在路径 
     }).extend({
         index: 'lib/index', //主入口模块
-        my:'my'
-    }).use(['index', 'jquery', 'layim','my'], function () {
-        const admin = layui.admin;
+        my: 'my'
+    }).use(['index', 'jquery', 'layim', 'my'], function () {
         const $ = layui.jquery;
         const layim = layui.layim;
         const my = layui.my;
-        my.adminGetUserInfo({},function(data){
+        my.adminGetUserInfo({}, function (data) {
             $("#name").text(data.username);
         });
-        my.imGetInfo({},function(data){
-            layim.config({init: data,isVideo: 1});
+        my.imGetInfo({}, function (data) {
+            layim.config({init: data, isVideo: 1});
+            layim.function.addFriends = function(i){
+                console.log($(i).attr('data-id'));
+            };
             layim.function.search = function (i) {
-                const a = $('#layui-layim').find(".layui-layim-search");
-                a.show();
-                const input = a.find('input');
-                input.focus(), input.keyup(function () {
+                const search = $('#layui-layim').find(".layui-layim-search");
+                search.show();
+                const input = search.find('input');
+                input.focus();
+                input.keyup(function () {
+                    if (input.val() === '') return;
+                    my.findUser({username: input.val()}, function (data) {
+                        let o = '<li class="layim-null">无搜索结果</li>';
+                        console.log(data);
+                        if (data.username !== '' && data.username !== undefined) o = '<li layim-event="addFriends"  data-id="'+data.id+'"  data-type="friend" data-index="0" data-list="0"><img src="' + data.avatar + '"><span>' + (data.username || data.groupname || "佚名") + '</span><p></p><span class="layim-add-friends"><button class="layui-btn  layui-btn-sm layui-btn-radius"><i class="layui-icon" style="font-size: 18px">&#xe654;</i></button></span></li>';
+                        $('#layui-layim').find("#layui-layim-search").html(o);
+                        layim.function.tab(3);
+                    })
                 });
             };
         });
 
-        const coinSocket = new WebSocket('ws://192.168.80.132:9000/coin', layui.data('token').token);
+        const coinSocket = my.webSocket('ws://192.168.80.132:9000/coin');
         coinSocket.onmessage = function (res) {
             if (res.data !== '') window.dispatchEvent(new CustomEvent('coin', {detail: {'brc': res.data}}));
         };
-        const ImSocket = new WebSocket('ws://192.168.80.132:9000/Im', layui.data('token').token);
+        const ImSocket = my.webSocket('ws://192.168.80.132:9000/Im');
         ImSocket.onopen = function () {
             ImSocket.send('im.online:上线了');
         };
@@ -507,7 +532,7 @@
                 var data = JSON.parse(res.data);
                 var type = data.type;
                 var config = data.data;
-                if (type === 1)  return layim.setFriendStatus(config.user_id, config.type);
+                if (type === 1) return layim.setFriendStatus(config.user_id, config.type);
                 if (type === 2) layim.getMessage(config);
             }
         };
@@ -522,5 +547,3 @@
 
 </body>
 </html>
-
-
