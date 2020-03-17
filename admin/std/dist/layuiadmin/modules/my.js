@@ -2,7 +2,7 @@
 layui.define(['view'], function (i) {
     const $ = layui.jquery, view = layui.view,
         e = {
-            url: 'http://www.swoft.axing.com/',
+            url: 'http://api.init.store/',
             adminGetUserInfo: function (data, callback) {
                 this.ajax('admin/getUserInfo', data, callback);
             },
