@@ -519,11 +519,11 @@
             };
         });
 
-        const coinSocket = my.webSocket('ws://api.init.store/coin');
+        const coinSocket = my.webSocket('ws://ws.init.store/coin');
         coinSocket.onmessage = function (res) {
             if (res.data !== '') window.dispatchEvent(new CustomEvent('coin', {detail: {'brc': res.data}}));
         };
-        const ImSocket = my.webSocket('ws://api.init.store/Im');
+        const ImSocket = my.webSocket('ws://ws.init.store/Im');
         ImSocket.onopen = function () {
             ImSocket.send('im.online:上线了');
         };
